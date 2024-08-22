@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace PointOfSale;
+﻿namespace PointOfSale;
 
 class Program
 {
@@ -12,18 +10,39 @@ class Program
         Cafe.menu.Add(new Cafe("Danish", "food", "bread product", 6.99M));
         
         Console.WriteLine("Welcome to the Three Musketeers' Coffee Shop:");
-        foreach (var m in Cafe.menu)
+        do
         {
-            Console.WriteLine($"{m.MenuItem} {m.Price}");
-        }
-        Console.WriteLine("What can I get for you today?");
-        
-        Console.WriteLine("How many do you want?");
-        Validator.GetPositiveInputInt();
+            Shop();
+        } 
+        while (Validator.GetContinue("Would you like to make another purchase?"));
 
+        Console.WriteLine("Thank you for shopping at Three Musketeers'!");
+        Console.WriteLine("Press any key to exit...");
+        Console.ReadKey();
     }
+
+    static void Shop()
+    {
+        List<Cafe> cart = new();
+
+        do
+        {
+			foreach (var m in Cafe.menu)
+			{
+				Console.WriteLine($"{m.MenuItem} {m.Price}");
+			}
+			Console.WriteLine("What can I get for you today?");
+
+			Console.WriteLine("How many do you want?");
+			Validator.GetPositiveInputInt();
+		}
+        while (Validator.GetContinue("Would you like to purchase another item?"));
+
+        SalesCalculator sales = new(cart);
+        makePayment(sales);
+	}
     
-    static void makePayment()
+    static void makePayment(SalesCalculator sales)
     { 
         string paymentType;
         while (true)

@@ -2,21 +2,22 @@
 {
 	internal class SalesCalculator
 	{
-		private readonly IEnumerable<object> Purchases;
+		const decimal TAX_RATE = .07m;
+		private readonly IEnumerable<Cafe> Purchases;
 
-		public SalesCalculator(IEnumerable<object> purchases)
+		public SalesCalculator(IEnumerable<Cafe> purchases)
 		{
 			Purchases = purchases;
 		}
 
 		public decimal GetSubTotal()
 		{
-			return 0m;
+			return Purchases.Sum(cafe => cafe.Price);
 		}
 
 		public decimal GetSalesTax()
 		{
-			return 0m;
+			return Math.Round(GetSubTotal() * TAX_RATE, 2);
 		}
 
 		public decimal GetTotal()
