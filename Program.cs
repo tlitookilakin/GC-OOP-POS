@@ -1,4 +1,6 @@
-﻿namespace PointOfSale;
+﻿using System.Numerics;
+
+namespace PointOfSale;
 
 class Program
 {
@@ -21,48 +23,84 @@ class Program
 
     }
     
-    static void getPaymentType()
+    static void makePayment()
     { 
         string paymentType;
         while (true)
         {
             Console.WriteLine("Please select payment type:");
-            Console.WriteLine("Enter 'cash',  'credit', or 'check'.");
+            Console.WriteLine("Enter 'cash',  'credit card', or 'check'.");
             paymentType = Console.ReadLine().ToLower();
             if (paymentType == "cash")
             {
-                payCash();
+                payCash(10.00m);
                 break;
             }
-            else if (paymentType == "credit")
+            else if (paymentType == "credit card")
             {
-
+                payCreditCard(10.00m);
+                break;
             }
             else if (paymentType == "check")
             {
-
+                payCheck(10.00m);
+                break;
             }
         }
+        //TODO display receipt and verify payment
     }
 
-    static void payCash() 
+    static decimal payCash(decimal totalCost) 
     {
-        double amountTendered;
+        decimal amountTendered;
         while (true)
         {
             Console.WriteLine($"Your total is {totalCost}.");
             Console.WriteLine("How much cash will you pay with?");
             try
             {
-                amountTendered = double.Parse(Console.ReadLine());
-                break;
+                amountTendered = decimal.Parse(Console.ReadLine());
+                if (amountTendered >= totalCost)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("This is not enough cash.");
+                }
             }
             catch
             {
                 Console.WriteLine("Please enter a valid number.");
             }
         }
-        double change = amountTendered - totalCost;
+        decimal change = amountTendered - totalCost;
         Console.WriteLine($"Your change is {change}.");
+        return change;
+    }
+
+    static void payCreditCard(decimal totalCost)
+    {
+        //TODO validation
+        string cardNumber;
+        string expiration;
+        string cvv;
+
+        Console.WriteLine("Please enter card number.");
+        cardNumber = Console.ReadLine();
+        Console.WriteLine("Please enter expiration.");
+        expiration = Console.ReadLine();
+        Console.WriteLine("Please enter CVV.");
+        cvv = Console.ReadLine();
+
+        //TODO verify card is not expired
+    }
+
+    static void payCheck(decimal totalCost)
+    {
+        string checkNumber;
+
+        Console.WriteLine("Please enter check number.");
+        checkNumber = Console.ReadLine();
     }
 }
