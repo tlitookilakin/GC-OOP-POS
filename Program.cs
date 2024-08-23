@@ -37,7 +37,8 @@ class Program
         {
             foreach (var m in Cafe.menu)
             {
-                Console.WriteLine($"{m.MenuItem} {m.Price}");
+                //Console.WriteLine($"{m.MenuItem} ${m.Price}");
+                Console.WriteLine("{0,20} {1:C2}",m.MenuItem,m.Price);
             }
 
             Console.WriteLine("What can I get for you today?");

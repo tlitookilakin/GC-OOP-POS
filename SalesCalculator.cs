@@ -43,8 +43,10 @@
             Console.WriteLine($"Paid with {paymentType}.");
             if (paymentType == "cash")
 			{
-                Console.WriteLine($"Amount paid: {cashPaid}");
-                Console.WriteLine($"Change: {cashPaid - grandTotal}");
+				//Console.WriteLine($"Amount paid: {cashPaid}");
+				//Console.WriteLine($"Change: {cashPaid - grandTotal}");
+				Console.WriteLine("Amount paid: {0:C2}",cashPaid);
+                Console.WriteLine("Change: {0:C2}",cashPaid - grandTotal);
             }
 			else if (paymentType == "credit card")
 			{
