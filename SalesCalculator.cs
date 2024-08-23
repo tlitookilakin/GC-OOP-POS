@@ -33,7 +33,7 @@
 		// cash paid with
 		// card number
 		// check number
-		public void DisplayReceipt(string paymentType, decimal cashPaid, string cardNumber, string checkNumber)
+		public void DisplayReceipt(string paymentType, decimal cashPaid = 0, string cardNumber = "", string checkNumber = "")
 		{
 			decimal grandTotal = GetTotal();
 

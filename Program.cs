@@ -52,6 +52,10 @@ class Program
     
     static void makePayment(SalesCalculator sales)
     { 
+        if (sales.GetTotal() == 0)
+        {
+            return;
+        }
         string paymentType;
         while (true)
         {
@@ -60,21 +64,20 @@ class Program
             paymentType = Console.ReadLine().ToLower();
             if (paymentType == "cash")
             {
-                payCash(sales.GetTotal());
+                sales.DisplayReceipt("cash",payCash(sales.GetTotal()));
                 break;
             }
             else if (paymentType == "credit card")
             {
-                payCreditCard(sales.GetTotal());
+                sales.DisplayReceipt("credit card",cardNumber: payCreditCard(sales.GetTotal()));
                 break;
             }
             else if (paymentType == "check")
             {
-                payCheck(sales.GetTotal());
+                sales.DisplayReceipt("check", checkNumber: payCheck(sales.GetTotal()));
                 break;
             }
         }
-        //TODO display receipt and verify payment
     }
 
     static decimal payCash(decimal totalCost) 
@@ -101,12 +104,12 @@ class Program
                 Console.WriteLine("Please enter a valid number.");
             }
         }
-        decimal change = amountTendered - totalCost;
-        Console.WriteLine($"Your change is {change}.");
-        return change;
+        //decimal change = amountTendered - totalCost;
+        //Console.WriteLine($"Your change is {change}.");
+        return amountTendered;
     }
 
-    static void payCreditCard(decimal totalCost)
+    static string payCreditCard(decimal totalCost)
     {
         //TODO validation
         string cardNumber;
@@ -121,13 +124,17 @@ class Program
         cvv = Console.ReadLine();
 
         //TODO verify card is not expired
+
+        return cardNumber;
     }
 
-    static void payCheck(decimal totalCost)
+    static string payCheck(decimal totalCost)
     {
         string checkNumber;
 
         Console.WriteLine("Please enter check number.");
         checkNumber = Console.ReadLine();
+
+        return checkNumber;
     }
 }
