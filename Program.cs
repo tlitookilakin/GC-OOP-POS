@@ -48,7 +48,6 @@ class Program
 			int i = 1;
             foreach (var m in Cafe.menu)
             {
-                //Console.WriteLine($"{m.MenuItem} ${m.Price}");
                 Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
                 i++;
             }
@@ -161,14 +160,11 @@ class Program
                 Console.WriteLine("Please enter a valid number.");
             }
         }
-        //decimal change = amountTendered - totalCost;
-        //Console.WriteLine($"Your change is {change}.");
         return amountTendered;
     }
 
     static string payCreditCard(decimal totalCost)
     {
-        //TODO validation
         string cardNumber;
         string expiration;
         string cvv;

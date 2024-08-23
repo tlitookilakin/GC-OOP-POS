@@ -2,7 +2,6 @@
 {
 	internal class SalesCalculator
 	{
-		//TODO exclude food items from tax
 		//TODO add method to list items
 
 		const decimal TAX_RATE = .07m;
@@ -25,7 +24,11 @@
 
 		public decimal GetSalesTax()
 		{
-			return Math.Round(GetSubTotal() * TAX_RATE, 2);
+			decimal taxableSubTotal = Purchases
+				.Where(cafe => !cafe.Category.Equals("food", StringComparison.OrdinalIgnoreCase))
+				.Sum(cafe => cafe.Price * cafe.Count);
+
+			return Math.Round(taxableSubTotal * TAX_RATE, 2);
 		}
 
 		public decimal GetTotal()
@@ -48,8 +51,6 @@
             Console.WriteLine($"Paid with {paymentType}.");
             if (paymentType == "cash")
 			{
-				//Console.WriteLine($"Amount paid: {cashPaid}");
-				//Console.WriteLine($"Change: {cashPaid - grandTotal}");
 				Console.WriteLine("Amount paid: {0:C2}",cashPaid);
                 Console.WriteLine("Change: {0:C2}",cashPaid - grandTotal);
             }
