@@ -2,6 +2,9 @@
 {
 	internal class SalesCalculator
 	{
+		//TODO exclude food items from tax
+		//TODO add method to list items
+
 		const decimal TAX_RATE = .07m;
 		private readonly IEnumerable<Cafe> Purchases;
 

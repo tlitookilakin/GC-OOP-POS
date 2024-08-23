@@ -39,15 +39,45 @@ class Program
             {
                 Console.WriteLine($"{m.MenuItem} {m.Price}");
             }
-            Console.WriteLine("What can I get for you today?");
 
-            Console.WriteLine("How many do you want?");
-            Validator.GetPositiveInputInt();
+            Console.WriteLine("What can I get for you today?");
+            int whichItem = SelectItem();
+            Cafe selected = Cafe.menu[whichItem];
+
+            Console.WriteLine($"Purchasing {selected.MenuItem}. How many do you want?");
+			int count = Validator.GetPositiveInputInt();
+
+            for (int i = 0; i < count; i++)
+                cart.Add(selected);
+
+            Console.WriteLine($"Purchased {count} {selected.MenuItem}s.");
         }
         while (Validator.GetContinue("Would you like to purchase another item?"));
 
         SalesCalculator sales = new(cart);
         makePayment(sales);
+    }
+
+    static int SelectItem()
+    {
+        while (true)
+        {
+            string? line = Console.ReadLine();
+            if (line == null)
+                return -1;
+
+            line = line.Trim();
+
+            if (int.TryParse(line, out int index) && (index >= 1 || index <= Cafe.menu.Count))
+                return index - 1;
+
+            index = Cafe.menu.FindIndex(item => item.MenuItem.Contains(line, StringComparison.OrdinalIgnoreCase));
+
+			if (index >= 0)
+                return index;
+
+            Console.WriteLine("Sorry, I don't know what that is.");
+        }
     }
     
     static void makePayment(SalesCalculator sales)
