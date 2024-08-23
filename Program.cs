@@ -17,7 +17,6 @@ class Program
         Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
         Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
         
-        Console.WriteLine("Welcome to the Three Musketeers' Coffee Shop:");
         do
         {
             Shop();
@@ -35,12 +34,18 @@ class Program
 
         do
         {
+            Console.Clear();
+			Console.WriteLine("Welcome to the Three Musketeers' Coffee Shop:");
+
+			int i = 1;
             foreach (var m in Cafe.menu)
             {
                 //Console.WriteLine($"{m.MenuItem} ${m.Price}");
-                Console.WriteLine("{0,20} {1:C2}",m.MenuItem,m.Price);
+                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
+                i++;
             }
 
+            Console.WriteLine();
             Console.WriteLine("What can I get for you today?");
             int whichItem = SelectItem();
             Cafe selected = Cafe.menu[whichItem];
@@ -48,12 +53,14 @@ class Program
             Console.WriteLine($"Purchasing {selected.MenuItem}. How many do you want?");
 			int count = Validator.GetPositiveInputInt();
 
-            for (int i = 0; i < count; i++)
+            for (i = 0; i < count; i++)
                 cart.Add(selected);
 
             Console.WriteLine($"Purchased {count} {selected.MenuItem}s.");
         }
         while (Validator.GetContinue("Would you like to purchase another item?"));
+
+        Console.Clear();
 
         SalesCalculator sales = new(cart);
         makePayment(sales);
@@ -90,6 +97,7 @@ class Program
         string paymentType;
         while (true)
         {
+            Console.WriteLine($"Purchasing {sales.Count()} item(s) for a total of ${sales.GetTotal()}");
             Console.WriteLine("Please select payment type:");
             Console.WriteLine("Enter 'cash',  'credit card', or 'check'.");
             paymentType = Console.ReadLine().ToLower();
@@ -116,7 +124,6 @@ class Program
         decimal amountTendered;
         while (true)
         {
-            Console.WriteLine($"Your total is {totalCost}.");
             Console.WriteLine("How much cash will you pay with?");
             try
             {

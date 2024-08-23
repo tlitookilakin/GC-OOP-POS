@@ -13,6 +13,11 @@
 			Purchases = purchases;
 		}
 
+		public int Count()
+		{
+			return Purchases.Count();
+		}
+
 		public decimal GetSubTotal()
 		{
 			return Purchases.Sum(cafe => cafe.Price);
