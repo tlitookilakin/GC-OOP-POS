@@ -16,6 +16,7 @@ class Program
         Cafe.menu.Add(new Cafe("Yesterday's bread", "food", "whole grain", .99m));
         Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
         Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
+        Cafe.menu.Add(new Cafe("Tomorrow's bread", "food", "whole grain, unbaked", 11.99m));
 
         Cafe.Restock(20);
         Cafe.ReadFromFile("product_list.tsv");
@@ -172,6 +173,7 @@ class Program
         Console.WriteLine("Please enter card number.");
         cardNumber = Console.ReadLine();
 
+        //validating expiration date
         while (true)
         {
             Console.WriteLine("Please enter expiration.");
@@ -202,8 +204,20 @@ class Program
             }
         }
 
-        Console.WriteLine("Please enter CVV.");
-        cvv = Console.ReadLine();
+        //validating cvv
+        while (true)
+        {
+            Console.WriteLine("Please enter CVV.");
+            cvv = Console.ReadLine();
+            if (cvv.Length != 3)
+            {
+                Console.WriteLine("Invalid CVV");
+            }
+            else
+            {
+                break;
+            }
+        }
 
         return cardNumber;
     }

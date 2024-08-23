@@ -1,4 +1,6 @@
-﻿namespace PointOfSale
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace PointOfSale
 {
 	internal class SalesCalculator
 	{
@@ -48,6 +50,9 @@
 		{
 			decimal grandTotal = GetTotal();
 
+            Console.WriteLine("Subtotal: {0:C2}",GetSubTotal());
+            Console.WriteLine("Tax: {0:C2}",GetSalesTax());
+            Console.WriteLine("Grand Total: {0:C2}",grandTotal);
             Console.WriteLine($"Paid with {paymentType}.");
             if (paymentType == "cash")
 			{
