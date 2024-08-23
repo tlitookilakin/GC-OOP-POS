@@ -15,12 +15,12 @@
 
 		public int Count()
 		{
-			return Purchases.Count();
+			return Purchases.Sum(cafe => cafe.Count);
 		}
 
 		public decimal GetSubTotal()
 		{
-			return Purchases.Sum(cafe => cafe.Price);
+			return Purchases.Sum(cafe => cafe.Price * cafe.Count);
 		}
 
 		public decimal GetSalesTax()
@@ -62,6 +62,8 @@
 			{
                 Console.WriteLine($"Check number: {checkNumber}");
             }
+
+			Cafe.WriteToFile("product_list.tsv");
 		}
 	}
 }

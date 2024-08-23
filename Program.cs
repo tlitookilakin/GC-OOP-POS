@@ -17,10 +17,16 @@ class Program
         Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
         Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
 
+        Cafe.Restock(20);
         Cafe.ReadFromFile("product_list.tsv");
         
         do
         {
+            if (Validator.GetContinue("Would you like to restock?"))
+            {
+                Console.WriteLine("Please enter amount to stock to:");
+                Cafe.Restock(Validator.GetPositiveInputInt());
+            }
             Shop();
         }
         while (Validator.GetContinue("Would you like to make another purchase?"));
@@ -52,11 +58,17 @@ class Program
             int whichItem = SelectItem();
             Cafe selected = Cafe.menu[whichItem];
 
+            if (selected.Count == 0)
+            {
+                Console.WriteLine($"{selected.MenuItem} is out of stock.");
+                continue;
+            }
+
             Console.WriteLine($"Purchasing {selected.MenuItem}. How many do you want?");
 			int count = Validator.GetPositiveInputInt();
 
-            for (i = 0; i < count; i++)
-                cart.Add(selected);
+            if (count != 0)
+                cart.Add(new Cafe(selected, count));
 
             Console.WriteLine($"Purchased {count} {selected.MenuItem}s.");
         }
@@ -216,6 +228,7 @@ class Program
         string itemCategory;
         string itemDescription;
         decimal itemPrice;
+        int stock;
 
         Console.WriteLine("Please enter the name of the item.");
         itemName = Console.ReadLine();
@@ -225,8 +238,10 @@ class Program
         itemDescription = Console.ReadLine();
         Console.WriteLine("Please enter the price of the item.");
         itemPrice = Math.Round(Validator.GetPositiveInputDecimal(),2);
+        Console.WriteLine("How many of this item would you like to stock?");
+        stock = Validator.GetPositiveInputInt();
 
-        Cafe.menu.Add(new Cafe(itemName, itemCategory, itemDescription, itemPrice));
+        Cafe.menu.Add(new Cafe(itemName, itemCategory, itemDescription, itemPrice, stock));
         Cafe.WriteToFile("product_list.tsv");
     }
 }
