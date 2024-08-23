@@ -8,12 +8,20 @@ class Program
         Cafe.menu.Add(new Cafe("Black coffee", "drink", "coffee", 2.99M));
         Cafe.menu.Add(new Cafe("Water", "drink", "water", 3.99M));
         Cafe.menu.Add(new Cafe("Danish", "food", "bread product", 6.99M));
+        Cafe.menu.Add(new Cafe("Branded thermos", "merchandise", "1L insulated bottle", 33.98m));
+        Cafe.menu.Add(new Cafe("Branded T-shirt", "merchandise", "Black shirt with logo", 18.75m));
+        Cafe.menu.Add(new Cafe("Bear claw", "food", "pastry", 5.99m));
+        Cafe.menu.Add(new Cafe("Donut", "food", "pastry", 1.99m));
+        Cafe.menu.Add(new Cafe("Fresh bread", "food", "whole grain, fresh baked", 3.99m));
+        Cafe.menu.Add(new Cafe("Yesterday's bread", "food", "whole grain", .99m));
+        Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
+        Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
         
         Console.WriteLine("Welcome to the Three Musketeers' Coffee Shop:");
         do
         {
             Shop();
-        } 
+        }
         while (Validator.GetContinue("Would you like to make another purchase?"));
 
         Console.WriteLine("Thank you for shopping at Three Musketeers'!");
@@ -27,20 +35,20 @@ class Program
 
         do
         {
-			foreach (var m in Cafe.menu)
-			{
-				Console.WriteLine($"{m.MenuItem} {m.Price}");
-			}
-			Console.WriteLine("What can I get for you today?");
+            foreach (var m in Cafe.menu)
+            {
+                Console.WriteLine($"{m.MenuItem} {m.Price}");
+            }
+            Console.WriteLine("What can I get for you today?");
 
-			Console.WriteLine("How many do you want?");
-			Validator.GetPositiveInputInt();
-		}
+            Console.WriteLine("How many do you want?");
+            Validator.GetPositiveInputInt();
+        }
         while (Validator.GetContinue("Would you like to purchase another item?"));
 
         SalesCalculator sales = new(cart);
         makePayment(sales);
-	}
+    }
     
     static void makePayment(SalesCalculator sales)
     { 
@@ -52,17 +60,17 @@ class Program
             paymentType = Console.ReadLine().ToLower();
             if (paymentType == "cash")
             {
-                payCash(10.00m);
+                payCash(sales.GetTotal());
                 break;
             }
             else if (paymentType == "credit card")
             {
-                payCreditCard(10.00m);
+                payCreditCard(sales.GetTotal());
                 break;
             }
             else if (paymentType == "check")
             {
-                payCheck(10.00m);
+                payCheck(sales.GetTotal());
                 break;
             }
         }
