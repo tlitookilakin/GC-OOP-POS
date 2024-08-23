@@ -16,6 +16,8 @@ class Program
         Cafe.menu.Add(new Cafe("Yesterday's bread", "food", "whole grain", .99m));
         Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
         Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
+
+        Cafe.ReadFromFile("product_list.tsv");
         
         do
         {
