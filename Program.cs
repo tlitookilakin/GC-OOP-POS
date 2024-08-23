@@ -87,6 +87,11 @@ class Program
                 return index;
 
             Console.WriteLine("Sorry, I don't know what that is.");
+            if (Validator.GetContinue("Would you like to add the item?") == true)
+            {
+                addItem();
+                return Cafe.menu.Count - 1;
+            }
         }
     }
     
@@ -158,12 +163,39 @@ class Program
 
         Console.WriteLine("Please enter card number.");
         cardNumber = Console.ReadLine();
-        Console.WriteLine("Please enter expiration.");
-        expiration = Console.ReadLine();
+
+        while (true)
+        {
+            Console.WriteLine("Please enter expiration.");
+            expiration = Console.ReadLine();
+            string[] expirationDate = expiration.Split('/','\\');
+            if (expirationDate.Length == 2 && int.TryParse(expirationDate[0],out int expirationMonth) && int.TryParse(expirationDate[1], out int expirationYear))
+            {
+                expirationYear += 2000;
+                if (expirationMonth <= 12 && expirationMonth > 0)
+                {
+                    if ((expirationMonth > DateTime.Now.Month && expirationYear == DateTime.Now.Year) || expirationYear > DateTime.Now.Year)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("This card is expired");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid month");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input");
+            }
+        }
+
         Console.WriteLine("Please enter CVV.");
         cvv = Console.ReadLine();
-
-        //TODO verify card is not expired
 
         return cardNumber;
     }
@@ -176,5 +208,25 @@ class Program
         checkNumber = Console.ReadLine();
 
         return checkNumber;
+    }
+    
+    static void addItem()
+    {
+        string itemName;
+        string itemCategory;
+        string itemDescription;
+        decimal itemPrice;
+
+        Console.WriteLine("Please enter the name of the item.");
+        itemName = Console.ReadLine();
+        Console.WriteLine("Please enter the category of the item.");
+        itemCategory = Console.ReadLine();
+        Console.WriteLine("Please enter the item description.");
+        itemDescription = Console.ReadLine();
+        Console.WriteLine("Please enter the price of the item.");
+        itemPrice = Math.Round(Validator.GetPositiveInputDecimal(),2);
+
+        Cafe.menu.Add(new Cafe(itemName, itemCategory, itemDescription, itemPrice));
+        Cafe.WriteToFile("product_list.tsv");
     }
 }
