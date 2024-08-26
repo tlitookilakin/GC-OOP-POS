@@ -50,23 +50,30 @@ namespace PointOfSale
 		{
 			decimal grandTotal = GetTotal();
 
-            Console.WriteLine("Subtotal: {0:C2}",GetSubTotal());
-            Console.WriteLine("Tax: {0:C2}",GetSalesTax());
-            Console.WriteLine("Grand Total: {0:C2}",grandTotal);
-            Console.WriteLine($"Paid with {paymentType}.");
+            Console.WriteLine("SUBTOTAL: {0:C2}",GetSubTotal());
+            Console.WriteLine("SALESTAX: {0:C2}",GetSalesTax());
+            Console.WriteLine("GRAND TOTAL: {0:C2}",grandTotal);
+            //Console.WriteLine($"Paid with {paymentType}.");
             if (paymentType == "cash")
 			{
-				Console.WriteLine("Amount paid: {0:C2}",cashPaid);
-                Console.WriteLine("Change: {0:C2}",cashPaid - grandTotal);
+				Console.WriteLine("CASH TENDERED: {0:C2}",cashPaid);
+                Console.WriteLine("CHANGE DUE: {0:C2}",cashPaid - grandTotal);
             }
 			else if (paymentType == "credit card")
 			{
-                // TODO card number substring for last 4 digits
-                Console.WriteLine($"Card used: {cardNumber}");
+				//Console.WriteLine($"Card used: {cardNumber}");
+				Console.Write("VISA AUTHORIZED: ");
+                string lastFour = cardNumber.Substring(12, 4);
+                for (int cn = 0; cn < cardNumber.Length - 4; cn++)
+                {
+	                Console.Write($"x");
+                }
+                Console.WriteLine($"{lastFour}\n");
             }
 			else
 			{
-                Console.WriteLine($"Check number: {checkNumber}");
+				Console.WriteLine($"CHECK REFERENCE #: xxxxxxxxx xxxxxxxxxxxx {checkNumber}");
+                //Console.WriteLine($"Check number: {checkNumber}");
             }
 
 			Cafe.WriteToFile("product_list.tsv");

@@ -156,7 +156,7 @@ namespace PointOfSale
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Try again");
+                    Console.WriteLine("Invalid input. Please try again.");
                 }
             }
             return result;

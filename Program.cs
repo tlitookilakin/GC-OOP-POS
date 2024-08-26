@@ -7,17 +7,17 @@ class Program
         Cafe.menu.Add(new Cafe("Iced latte", "drink", "coffee", 7.99M));
         Cafe.menu.Add(new Cafe("Black coffee", "drink", "coffee", 2.99M));
         Cafe.menu.Add(new Cafe("Water", "drink", "water", 3.99M));
+        Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
+        Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
         Cafe.menu.Add(new Cafe("Danish", "food", "bread product", 6.99M));
-        Cafe.menu.Add(new Cafe("Branded thermos", "merchandise", "1L insulated bottle", 33.98m));
-        Cafe.menu.Add(new Cafe("Branded T-shirt", "merchandise", "Black shirt with logo", 18.75m));
         Cafe.menu.Add(new Cafe("Bear claw", "food", "pastry", 5.99m));
         Cafe.menu.Add(new Cafe("Donut", "food", "pastry", 1.99m));
         Cafe.menu.Add(new Cafe("Fresh bread", "food", "whole grain, fresh baked", 3.99m));
         Cafe.menu.Add(new Cafe("Yesterday's bread", "food", "whole grain", .99m));
-        Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
-        Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
         Cafe.menu.Add(new Cafe("Tomorrow's bread", "food", "whole grain, unbaked", 11.99m));
-
+        Cafe.menu.Add(new Cafe("Branded thermos", "merchandise", "1L insulated bottle", 33.98m));
+        Cafe.menu.Add(new Cafe("Branded T-shirt", "merchandise", "Black shirt with logo", 18.75m));
+        
         Cafe.Restock(20);
         Cafe.ReadFromFile("product_list.tsv");
         
@@ -32,7 +32,7 @@ class Program
         }
         while (Validator.GetContinue("Would you like to make another purchase?"));
 
-        Console.WriteLine("Thank you for shopping at Three Musketeers'!");
+        Console.WriteLine("Thank you for shopping at The Three Musketeers'!");
         Console.WriteLine("Press any key to exit...");
         Console.ReadKey();
     }
@@ -44,36 +44,55 @@ class Program
         do
         {
             Console.Clear();
-			Console.WriteLine("Welcome to the Three Musketeers' Coffee Shop:");
-
+			Console.WriteLine("Welcome to The Three Musketeers' Coffee Shop! Here is the full menu:");
 			int i = 1;
-            foreach (var m in Cafe.menu)
+            string drinks = "DRINKS:";
+            Console.SetCursorPosition((Console.WindowWidth - drinks.Length) / 10, Console.CursorTop);  
+            Console.WriteLine(drinks); 
+            foreach (var m in Cafe.menu.GetRange(0,5))
+            {
+                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
+                i++;
+            }
+            Console.WriteLine();
+            string food = "FOOD/PASTRIES:";
+            Console.SetCursorPosition((Console.WindowWidth - food.Length) / 10, Console.CursorTop);  
+            Console.WriteLine(food); 
+            foreach (var m in Cafe.menu.GetRange(5,6))
+            {
+                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
+                i++;
+            }
+            Console.WriteLine();
+            string swag = "MERCHANDISE:";
+            Console.SetCursorPosition((Console.WindowWidth - swag.Length) / 10, Console.CursorTop);  
+            Console.WriteLine(swag); 
+            foreach (var m in Cafe.menu.GetRange(11,2))
             {
                 Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
                 i++;
             }
 
             Console.WriteLine();
-            Console.WriteLine("What can I get for you today?");
+            Console.Write("Please enter a number to the corresponding item you want to purchase:  ");
             int whichItem = SelectItem();
             Cafe selected = Cafe.menu[whichItem];
 
             if (selected.Count == 0)
             {
-                Console.WriteLine($"{selected.MenuItem} is out of stock.");
+                Console.WriteLine($"{selected.MenuItem} is out of stock.\n");
                 continue;
             }
 
-            Console.WriteLine($"Purchasing {selected.MenuItem}. How many do you want?");
+            Console.Write($"You chose {selected.MenuItem}. How many would you like to purchase?  ");
 			int count = Validator.GetPositiveInputInt();
 
             if (count != 0)
                 cart.Add(new Cafe(selected, count));
 
-            Console.WriteLine($"Purchased {count} {selected.MenuItem}s.");
+            Console.WriteLine($"You purchased {count} {selected.MenuItem}s.\n");
         }
         while (Validator.GetContinue("Would you like to purchase another item?"));
-
         Console.Clear();
 
         SalesCalculator sales = new(cart);
@@ -117,20 +136,20 @@ class Program
         while (true)
         {
             Console.WriteLine($"Purchasing {sales.Count()} item(s) for a total of ${sales.GetTotal()}");
-            Console.WriteLine("Please select payment type:");
-            Console.WriteLine("Enter 'cash',  'credit card', or 'check'.");
-            paymentType = Console.ReadLine().ToLower();
-            if (paymentType == "cash")
+            //Console.WriteLine("Please select payment type:");
+            Console.WriteLine("Please choose your payment method. We accept: cash, credit card, check.");
+            paymentType = Console.ReadLine().Trim().ToLower();
+            if ("cash".Contains(paymentType))
             {
                 sales.DisplayReceipt("cash",payCash(sales.GetTotal()));
                 break;
             }
-            else if (paymentType == "credit card")
+            else if ("credit".Contains(paymentType) || "card".Contains(paymentType) || "credit card".Contains(paymentType))
             {
                 sales.DisplayReceipt("credit card",cardNumber: payCreditCard(sales.GetTotal()));
                 break;
             }
-            else if (paymentType == "check")
+            else if ("check".Contains(paymentType))
             {
                 sales.DisplayReceipt("check", checkNumber: payCheck(sales.GetTotal()));
                 break;
@@ -153,12 +172,13 @@ class Program
                 }
                 else
                 {
-                    Console.WriteLine("This is not enough cash.");
+                    decimal shortOnCash = totalCost - amountTendered;
+                    Console.WriteLine($"Sorry, this is not enough. Your total is ${totalCost}, you still need ${shortOnCash}.");
                 }
             }
             catch
             {
-                Console.WriteLine("Please enter a valid number.");
+                Console.WriteLine("Invalid input. Please try again.");
             }
         }
         return amountTendered;
@@ -169,14 +189,25 @@ class Program
         string cardNumber;
         string expiration;
         string cvv;
-
-        Console.WriteLine("Please enter card number.");
-        cardNumber = Console.ReadLine();
+        
+        while (true)
+        {
+            Console.Write("Please enter 16-digit card number:  ");
+            cardNumber = Console.ReadLine();
+            if (cardNumber.Length != 16)
+            {
+                Console.WriteLine("Invalid card number. Please try again.");
+            }
+            else
+            {
+                break;
+            }
+        }
 
         //validating expiration date
         while (true)
         {
-            Console.WriteLine("Please enter expiration.");
+            Console.Write("Please enter expiration date (MM/YY):  ");
             expiration = Console.ReadLine();
             string[] expirationDate = expiration.Split('/','\\');
             if (expirationDate.Length == 2 && int.TryParse(expirationDate[0],out int expirationMonth) && int.TryParse(expirationDate[1], out int expirationYear))
@@ -190,45 +221,55 @@ class Program
                     }
                     else
                     {
-                        Console.WriteLine("This card is expired");
+                        Console.WriteLine("The card provided is expired. Please try again.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid month");
+                    Console.WriteLine("Invalid month. Please try again.");
                 }
             }
             else
             {
-                Console.WriteLine("Invalid input");
+                Console.WriteLine("Invalid input. Please try again.");
             }
         }
 
         //validating cvv
         while (true)
         {
-            Console.WriteLine("Please enter CVV.");
+            Console.Write("Please enter 3-digit CVV:  ");
             cvv = Console.ReadLine();
             if (cvv.Length != 3)
             {
-                Console.WriteLine("Invalid CVV");
+                Console.WriteLine("Invalid CVV. Please try again.");
             }
             else
             {
                 break;
             }
         }
-
+        Console.Clear();
         return cardNumber;
     }
 
     static string payCheck(decimal totalCost)
     {
         string checkNumber;
-
-        Console.WriteLine("Please enter check number.");
-        checkNumber = Console.ReadLine();
-
+        while (true)
+        {
+            Console.Write("Please enter 6-digit check number:  ");
+            checkNumber = Console.ReadLine();
+            if (checkNumber.Length != 6)
+            {
+                Console.WriteLine("Invalid check. Please try again.");
+            }
+            else
+            {
+                break;
+            }
+        }
+        Console.Clear();
         return checkNumber;
     }
     
