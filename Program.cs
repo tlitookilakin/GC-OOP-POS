@@ -8,15 +8,19 @@ class Program
         Cafe.menu.Add(new Cafe("Black coffee", "drink", "coffee", 2.99M));
         Cafe.menu.Add(new Cafe("Water", "drink", "water", 3.99M));
         Cafe.menu.Add(new Cafe("Chai", "drink", "hot and cozy", 2.99m));
+        Cafe.menu.Add(new Cafe("Cheese Danish", "pastry", "cheese bread", 3.99m));
         Cafe.menu.Add(new Cafe("Peppermint tea", "drink", "fresh and herbal, caffeine free.", 2.99m));
         Cafe.menu.Add(new Cafe("Danish", "food", "bread product", 6.99M));
-        Cafe.menu.Add(new Cafe("Bear claw", "food", "pastry", 5.99m));
+        Cafe.menu.Add(new Cafe("Breakfast Burrito", "food", "cylindrical taco", 14.99M));
+        Cafe.menu.Add(new Cafe("Bear claw", "pastry", "not actually the claw of a bear", 5.99m));
         Cafe.menu.Add(new Cafe("Donut", "food", "pastry", 1.99m));
         Cafe.menu.Add(new Cafe("Fresh bread", "food", "whole grain, fresh baked", 3.99m));
         Cafe.menu.Add(new Cafe("Yesterday's bread", "food", "whole grain", .99m));
         Cafe.menu.Add(new Cafe("Tomorrow's bread", "food", "whole grain, unbaked", 11.99m));
         Cafe.menu.Add(new Cafe("Branded thermos", "merchandise", "1L insulated bottle", 33.98m));
         Cafe.menu.Add(new Cafe("Branded T-shirt", "merchandise", "Black shirt with logo", 18.75m));
+        Cafe.menu.Add(new Cafe("Bacon (3 strips)", "add-on", "meat from pig", 5.99M));
+        Cafe.menu.Add(new Cafe("Tofu Bacon (3 strips)", "add-on", "bacon from a tofu", 3.99m));
         
         Cafe.Restock(20);
         Cafe.ReadFromFile("product_list.tsv");
