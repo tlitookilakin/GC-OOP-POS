@@ -76,6 +76,8 @@ class Program
             Console.WriteLine();
             Console.Write("Please enter a number to the corresponding item you want to purchase:  ");
             int whichItem = SelectItem();
+            //int whichItem = Validator.GetPositiveInputIntTwoPointOh();
+            //whichItem = SelectItem();
             Cafe selected = Cafe.menu[whichItem];
 
             if (selected.Count == 0)
@@ -84,13 +86,13 @@ class Program
                 continue;
             }
 
-            Console.Write($"You chose {selected.MenuItem}. How many would you like to purchase?  ");
+            Console.Write($"You chose {selected.MenuItem.ToLower()}. How many {selected.MenuItem.ToLower()}s you like to purchase?  ");
 			int count = Validator.GetPositiveInputInt();
 
             if (count != 0)
                 cart.Add(new Cafe(selected, count));
 
-            Console.WriteLine($"You purchased {count} {selected.MenuItem}s.\n");
+            Console.WriteLine($"You purchased {count} {selected.MenuItem.ToLower()}s.\n");
         }
         while (Validator.GetContinue("Would you like to purchase another item?"));
         Console.Clear();
@@ -101,28 +103,36 @@ class Program
 
     static int SelectItem()
     {
+        int result = -1;
+        while (!int.TryParse(Console.ReadLine(), out result) || result <= 0 || result > 13) 
+        // if more products are added to list last parameter needs to be changed     
+        {
+            Console.Write("Invalid input. Please enter a number to the corresponding item you want to purchase:  ");
+        }
         while (true)
         {
-            string? line = Console.ReadLine();
+            string? line = result.ToString();
             if (line == null)
+            {
                 return -1;
-
-            line = line.Trim();
-
+            }
+            //line = line.Trim();
             if (int.TryParse(line, out int index) && (index >= 1 || index <= Cafe.menu.Count))
+            {
                 return index - 1;
-
+            }
             index = Cafe.menu.FindIndex(item => item.MenuItem.Contains(line, StringComparison.OrdinalIgnoreCase));
-
-			if (index >= 0)
+            if (index >= 0)
+            {
                 return index;
-
+            }
             Console.WriteLine("Sorry, I don't know what that is.");
             if (Validator.GetContinue("Would you like to add the item?") == true)
             {
                 addItem();
                 return Cafe.menu.Count - 1;
             }
+            Console.Clear();
         }
     }
     
@@ -188,7 +198,7 @@ class Program
     {
         string cardNumber;
         string expiration;
-        string cvv;
+        int cvv1;
         
         while (true)
         {
@@ -239,8 +249,9 @@ class Program
         while (true)
         {
             Console.Write("Please enter 3-digit CVV:  ");
-            cvv = Console.ReadLine();
-            if (cvv.Length != 3)
+            cvv1 = Validator.GetPositiveInputInt();
+            string cvv2 = cvv1.ToString();
+            if (cvv2.Length != 3)
             {
                 Console.WriteLine("Invalid CVV. Please try again.");
             }

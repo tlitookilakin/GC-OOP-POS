@@ -53,11 +53,11 @@ namespace PointOfSale
             int result = -1;
             while (int.TryParse(Console.ReadLine(), out result) == false || result <= 0)
             {
-                Console.WriteLine("Invalid input. Try again with a positive number.");
+                Console.Write("Invalid input. Try again with a positive number:  ");
             }
             return result;
         }
-
+        
         public static double GetPositiveInputDouble()
         {
             double result = -1;
