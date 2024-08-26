@@ -260,7 +260,6 @@ class Program
                 break;
             }
         }
-        Console.Clear();
         return cardNumber;
     }
 
@@ -280,7 +279,6 @@ class Program
                 break;
             }
         }
-        Console.Clear();
         return checkNumber;
     }
     
