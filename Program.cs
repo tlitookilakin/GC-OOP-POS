@@ -79,20 +79,27 @@ class Program
             //int whichItem = Validator.GetPositiveInputIntTwoPointOh();
             //whichItem = SelectItem();
             Cafe selected = Cafe.menu[whichItem];
-
+            int itemCount = selected.Count;
             if (selected.Count == 0)
             {
                 Console.WriteLine($"{selected.MenuItem} is out of stock.\n");
                 continue;
             }
 
-            Console.Write($"You chose {selected.MenuItem.ToLower()}. How many {selected.MenuItem.ToLower()}s you like to purchase?  ");
+            Console.Write($"You chose {selected.MenuItem.ToLower()}. How many {selected.MenuItem.ToLower()}s you like to purchase? There are {selected.Count} in stock.  ");
 			int count = Validator.GetPositiveInputInt();
 
             if (count != 0)
                 cart.Add(new Cafe(selected, count));
 
-            Console.WriteLine($"You purchased {count} {selected.MenuItem.ToLower()}s.\n");
+            if (count > itemCount)
+            {
+                Console.WriteLine($"You purchased {itemCount} {selected.MenuItem.ToLower()}s.\n");
+            }
+            else
+            {
+                Console.WriteLine($"You purchased {count} {selected.MenuItem.ToLower()}s.\n");
+            }
         }
         while (Validator.GetContinue("Would you like to purchase another item?"));
         Console.Clear();
