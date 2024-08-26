@@ -20,8 +20,9 @@ class Program
         
         Cafe.Restock(20);
         Cafe.ReadFromFile("product_list.tsv");
-        
-        do
+		Cafe.menu.Sort((a, b) => string.Compare(a.Category, b.Category));
+
+		do
         {
             if (Validator.GetContinue("Would you like to restock?"))
             {
@@ -45,53 +46,23 @@ class Program
         {
             Console.Clear();
 			Console.WriteLine("Welcome to The Three Musketeers' Coffee Shop! Here is the full menu:");
-			int i = 1;
-            string drinks = "DRINKS:";
-            var newItemAdded = Cafe.menu.Where(n => n.Category.Contains("drink"));
-            Console.SetCursorPosition((Console.WindowWidth - drinks.Length) / 10, Console.CursorTop);  
-            Console.WriteLine(drinks);
-            foreach (var d in newItemAdded)
-            {
-                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", d.MenuItem, d.Price, i);
-                i++;
+
+            int i = 1;
+            var Grouped = Cafe.menu
+                .Select(cafe => new KeyValuePair<int, Cafe>(i++, cafe))
+                .GroupBy(pair => pair.Value.Category);
+
+            foreach (var group in Grouped)
+			{
+				Console.WriteLine();
+				string label = group.Key.ToUpper() + ':';
+                Console.Write(new string(' ', (32 - label.Length) / 2));
+				Console.WriteLine(label);
+                foreach ((int index, Cafe item) in group)
+                {
+					Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", item.MenuItem, item.Price, index);
+				}
             }
-            /*foreach (var m in Cafe.menu.GetRange(0, 5))
-            {
-                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
-                i++;
-            }*/
-            Console.WriteLine();
-            i = newItemAdded.Count() + 1; 
-            newItemAdded = Cafe.menu.Where(n => n.Category.Contains("food"));
-            string food = "FOOD/PASTRIES:";
-            Console.SetCursorPosition((Console.WindowWidth - food.Length) / 10, Console.CursorTop);  
-            Console.WriteLine(food); 
-            foreach (var f in newItemAdded)
-            {
-                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", f.MenuItem, f.Price, i);
-                i++;
-            }
-            /*
-            foreach (var m in Cafe.menu.GetRange(5,6))
-            {
-                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
-                i++;
-            }*/
-            Console.WriteLine();
-            newItemAdded = Cafe.menu.Where(m => m.Category.Contains("merchandise"));
-            string swag = "MERCHANDISE:";
-            Console.SetCursorPosition((Console.WindowWidth - swag.Length) / 10, Console.CursorTop);  
-            Console.WriteLine(swag); 
-            foreach (var m in newItemAdded)
-            {
-                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
-                i++;
-            }
-            /*foreach (var m in Cafe.menu.GetRange(11,2))
-            {
-                Console.WriteLine("{2,3}. {0,20} {1,-6:C2}", m.MenuItem, m.Price, i);
-                i++;
-            }*/
 
             Console.WriteLine();
             Console.Write("Please enter a name/number to the corresponding item you want to purchase:  ");
@@ -323,7 +294,8 @@ class Program
         Console.WriteLine("How many of this item would you like to stock?");
         stock = Validator.GetPositiveInputInt();
         
-       Cafe.menu.Add(new Cafe(itemName, itemCategory, itemDescription, itemPrice, stock));
+        Cafe.menu.Add(new Cafe(itemName, itemCategory, itemDescription, itemPrice, stock));
+        Cafe.menu.Sort((a, b) => string.Compare(a.Category, b.Category));
         Cafe.WriteToFile("product_list.tsv");
     }
 }
