@@ -126,8 +126,8 @@ class Program
             Console.WriteLine("Sorry, I don't know what that is.");
             if (Validator.GetContinue("Would you like to add the item?") == true)
             {
-                addItem();
-                return Cafe.menu.Count - 1;
+                Cafe addedItem = addItem();
+				return Cafe.menu.FindIndex(cafe => cafe == addedItem);
             }
             Console.Clear();
         }
@@ -279,7 +279,7 @@ class Program
         return checkNumber;
     }
     
-    static void addItem()
+    static Cafe addItem()
     {
         string itemName;
         string itemCategory;
@@ -297,9 +297,11 @@ class Program
         itemPrice = Math.Round(Validator.GetPositiveInputDecimal(),2);
         Console.WriteLine("How many of this item would you like to stock?");
         stock = Validator.GetPositiveInputInt();
-        
-        Cafe.menu.Add(new Cafe(itemName, itemCategory, itemDescription, itemPrice, stock));
+
+        Cafe newItem = new Cafe(itemName, itemCategory, itemDescription, itemPrice, stock);
+		Cafe.menu.Add(newItem);
         Cafe.menu.Sort((a, b) => string.Compare(a.Category, b.Category));
         Cafe.WriteToFile("product_list.tsv");
+        return newItem;
     }
 }
